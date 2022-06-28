@@ -1,5 +1,8 @@
 #include <Arduino.h>
 #include <main.h>
+#include <RGBmatrixPanel.h>
+
+extern RGBmatrixPanel matrix;
 
 void handlerGeneral(String &command, Menu &instance){
     Serial.println("GENERAL MENU");

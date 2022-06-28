@@ -5,16 +5,20 @@
 #include <menu/config.h>
 #include <states/stocks.h>
 #include <utils.h>
+#include <RGBmatrixPanel.h>
 
-Menu instance = Menu::GENERAL;
+Menu instance = Menu::STOCKS;
+extern RGBmatrixPanel matrix(A, B, C, D, CLK, LAT, OE, false, 64);
 
 void setup() {
   Serial.begin(9600, SERIAL_8N1);
   Serial1.begin(9600, SERIAL_8N1);
-  while(!Serial && !Serial1);
-
-  Serial.setTimeout(1000);
+  while(!Serial1);
   pinMode(LED_BUILTIN, OUTPUT);
+
+  // RGB Matrix Begin
+  matrix.begin();
+  prepareDisplay();
 }
 
 String command;
@@ -30,14 +34,13 @@ String command;
 void loop() {
 
   // Read next Command
-  if(Serial.available()){
-    command = Serial.readStringUntil('\'');
-    Serial.println(command);
+  if(Serial1.available()){
+    command = Serial1.readStringUntil('\'');
+    Serial1.readString();
   }
 
   if(command.startsWith("SADD"))
   {
-
     // SADD command
     std::vector<String> params = getParams(command);
     String symbol = params[0];
@@ -64,7 +67,7 @@ void loop() {
       handlerConfig(command, instance);
       break;
     case Menu::STOCKS:
-      handlerStocks(command, instance);
+      displayStocks();
       break;
     default:
       break;

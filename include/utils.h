@@ -6,4 +6,6 @@
 
 std::vector<String> getParams(String command);
 
+bool wait(unsigned long &last);
+
 #endif

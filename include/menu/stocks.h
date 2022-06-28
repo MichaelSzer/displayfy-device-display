@@ -2,8 +2,9 @@
 #define STOCKSH 
 
 #include <Arduino.h>
-#include <main.h>
 
-void handlerStocks(String &command, Menu &instance);
+void prepareDisplay();
+
+void displayStocks();
 
 #endif
