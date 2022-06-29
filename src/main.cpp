@@ -36,7 +36,6 @@ void loop() {
   // Read next Command
   if(Serial1.available()){
     command = Serial1.readStringUntil('\'');
-    Serial1.readString();
   }
 
   if(command.startsWith("SADD"))
@@ -72,5 +71,5 @@ void loop() {
     default:
       break;
   }
-  delay(1000);
+  delay(250);
 }

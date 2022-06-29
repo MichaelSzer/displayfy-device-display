@@ -50,7 +50,7 @@ void displayStocks(){
   // If there are no stocks, don't do anything
   if(numberOfStocks == 0) return;
 
-  wait(last);
+  if ( !wait(last) ) return;
 
   Serial.println("STOCKS MENU");
   showStock(it->first, it->second);
