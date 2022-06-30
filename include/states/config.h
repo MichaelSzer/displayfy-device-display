@@ -9,16 +9,21 @@ enum LayoutType {
     Modern // Layout Id 2
 };
 
+void setDefaultConfig();
+
 void setLayout(LayoutType);
 LayoutType getLayout();
 
 void setFrameColor(byte r, byte g, byte b);
-byte* getFrameColor();
+u_int16_t getFrameColor();
 
-void setColorGain(byte r, byte g, byte b);
-byte* getColorGain();
+void setBackgroundColor(byte r, byte g, byte b);
+u_int16_t getBackgroundColor();
 
-void setColorLoss(byte r, byte g, byte b);
-byte* getColorLoss();
+void setStockColorGain(byte r, byte g, byte b);
+u_int16_t getStockColorGain();
+
+void setStockColorLoss(byte r, byte g, byte b);
+u_int16_t getStockColorLoss();
 
 #endif

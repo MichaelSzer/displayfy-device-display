@@ -19,6 +19,7 @@ void setup() {
 
   // RGB Matrix Begin
   matrix.begin();
+  setDefaultConfig();
   prepareDisplay();
 }
 
