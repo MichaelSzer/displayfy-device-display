@@ -1,5 +1,5 @@
-#ifndef CONFIGH
-#define CONFIGH 
+#ifndef MENUCONFIGH
+#define MENUCONFIGH 
 
 #include <Arduino.h>
 #include <main.h>

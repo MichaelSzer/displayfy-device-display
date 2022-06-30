@@ -3,6 +3,7 @@
 #include <menu/general.h>
 #include <menu/stocks.h>
 #include <menu/config.h>
+#include <states/config.h>
 #include <states/stocks.h>
 #include <utils.h>
 #include <RGBmatrixPanel.h>
@@ -27,6 +28,7 @@ String command;
   Commands:
     - SADD|{Stock Symbol}|{Stock Price}': Add or update a stock to the list.
     - SDEL|{Stock Symbol}': Delete a stock from the list.
+    - CONFIG|LAYOUT|{Layout Id}': Set display layout.
     - GENERAL': Go to main menu.
     - CONFIG': Go to the configuration menu.
     - STOCKS': Go to the stocks menu
@@ -56,6 +58,30 @@ void loop() {
     
     command = "";
     removeStock(symbol);
+  }
+  else if(command.startsWith("CONFIG|LAYOUT"))
+  {
+    // CONFIG LAYOUT command params[0]: "LAYOUT" params[1]: "{0,1,2}"
+    std::vector<String> params = getParams(command);
+
+    // Change Layout Configuration
+    switch(params[1].toInt()){
+      case 0:
+        setLayout(LayoutType::Simple);
+        break;
+      case 1:
+        setLayout(LayoutType::Three);
+        break;
+      case 2:
+        setLayout(LayoutType::Modern);
+        break;
+    }
+
+    // Refresh Display Layout
+    if(instance == Menu::STOCKS)
+      prepareDisplay();
+
+    command = "";
   }
 
   switch(instance){

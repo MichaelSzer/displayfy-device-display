@@ -6,6 +6,11 @@
 */
 #include <states/stocks.h>
 
+/*
+    Work Pending
+        - Create Stock structure with price & daily change
+*/
+
 std::map<String, String> stocks = {};
 
 void addStock(String stock, String price){

@@ -1,5 +1,5 @@
-#ifndef STOCKSH
-#define STOCKSH 
+#ifndef MENUSTOCKSH
+#define MENUSTOCKSH 
 
 #include <Arduino.h>
 
