@@ -27,9 +27,14 @@ String command;
 
 /*
   Commands:
-    - SADD|{Stock Symbol}|{Stock Price}': Add or update a stock to the list.
+    - SADD|{Stock Symbol}|{Stock Price}||{Stock Price Change}||{Stock Percentage Change}': Add or update a stock to the list.
     - SDEL|{Stock Symbol}': Delete a stock from the list.
     - CONFIG|LAYOUT|{Layout Id}': Set display layout.
+    - CONFIG|FRAMECOLOR|{R}|{G}|{B}': Set frame color.
+    - CONFIG|BACKGROUNDCOLOR|{R}|{G}|{B}': Set background color.
+    - CONFIG|STOCKCOLORLOSS|{R}|{G}|{B}': Set stock color for losses.
+    - CONFIG|STOCKCOLORGAIN|{R}|{G}|{B}': Set stock color for gains.
+    - CONFIG|PERIOD|{Period}': Set period of stocks display.
     - GENERAL': Go to main menu.
     - CONFIG': Go to the configuration menu.
     - STOCKS': Go to the stocks menu
@@ -47,9 +52,11 @@ void loop() {
     std::vector<String> params = getParams(command);
     String symbol = params[0];
     String price = params[1];
+    String priceChange = params[2];
+    String percentageChange = params[3];
 
     command = "";
-    addStock(symbol, price);
+    addStock(symbol, price, priceChange, percentageChange);
   }
   else if(command.startsWith("SDEL"))
   {
@@ -81,6 +88,55 @@ void loop() {
     // Refresh Display Layout
     if(instance == Menu::STOCKS)
       prepareDisplay();
+
+    command = "";
+  }
+  else if(command.startsWith("CONFIG|FRAMECOLOR"))
+  {
+    // CONFIG FRAMECOLOR command params[0]: "FRAMECOLOR" params[1]: "{0-255}" params[2]: "{0-255}" params[3]: "{0-255}"
+    std::vector<String> params = getParams(command);
+
+    // Change Frame Color Configuration
+    setFrameColor( params[1].toInt(), params[2].toInt(), params[3].toInt() );
+
+    command = "";
+  }
+  else if(command.startsWith("CONFIG|BACKGROUNDCOLOR"))
+  {
+    // CONFIG FRAMECOLOR command params[0]: "BACKGROUNDCOLOR" params[1]: "{0-255}" params[2]: "{0-255}" params[3]: "{0-255}"
+    std::vector<String> params = getParams(command);
+
+    // Change Frame Color Configuration
+    setBackgroundColor( params[1].toInt(), params[2].toInt(), params[3].toInt() );
+
+    command = "";
+  }
+  else if(command.startsWith("CONFIG|STOCKCOLORLOSS"))
+  {
+    // CONFIG FRAMECOLOR command params[0]: "STOCKCOLORLOSS" params[1]: "{0-255}" params[2]: "{0-255}" params[3]: "{0-255}"
+    std::vector<String> params = getParams(command);
+
+    // Change Frame Color Configuration
+    setStockColorLoss( params[1].toInt(), params[2].toInt(), params[3].toInt() );
+
+    command = "";
+  }
+  else if(command.startsWith("CONFIG|STOCKCOLORGAIN"))
+  {
+    // CONFIG FRAMECOLOR command params[0]: "FRAMECOLOR" params[1]: "{0-255}" params[2]: "{0-255}" params[3]: "{0-255}"
+    std::vector<String> params = getParams(command);
+
+    // Change Frame Color Configuration
+    setStockColorGain( params[1].toInt(), params[2].toInt(), params[3].toInt() );
+
+    command = "";
+  }else if(command.startsWith("CONFIG|PERIOD"))
+  {
+    // CONFIG FRAMECOLOR command params[0]: "FRAMECOLOR" params[1]: "{0-255}" params[2]: "{0-255}" params[3]: "{0-255}"
+    std::vector<String> params = getParams(command);
+
+    // Change Frame Color Configuration
+    setPeriod( params[0].toInt() );
 
     command = "";
   }

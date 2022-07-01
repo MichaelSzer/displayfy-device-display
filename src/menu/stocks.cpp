@@ -8,7 +8,7 @@
 
 extern RGBmatrixPanel matrix;
 unsigned long last = (unsigned long)100000000000;
-std::map<String, String>::iterator it;
+std::map<String, Stock>::iterator it;
 u_int8_t numberOfStocks = 0;
 
 /*
@@ -81,8 +81,6 @@ void showStocksThree(String symbol, String price) {
         }else
             matrix.print(c);
     }
-    //matrix.printf("%s $%s", symbol, price);
-
     
     if((numberOfStocks >= 3 && ++place > 2)
         || (numberOfStocks == 2 && ++place > 1)
@@ -94,7 +92,62 @@ void showStocksThree(String symbol, String price) {
   Modern Layout
 */
 
-// To-Do
+void paintFrameModern() {
+    // Clean Screen First
+    matrix.fillRect(0, 0, matrix.width(), matrix.height(), getBackgroundColor());
+    
+    matrix.fillRect(0, 0, 25, 9, getFrameColor());
+    //matrix.drawLine(24, 0, 24, 8, getFrameColor());
+    //matrix.drawLine(0, 8, 24, 8, getFrameColor());
+    matrix.drawLine(matrix.width()-1, 0, matrix.width()-1, matrix.height()-1, getFrameColor());
+}
+
+void showStocksModern(String symbol, String price, String dailyPercentageChange) {
+
+    // Clean Screen Text Place
+    paintFrameModern();
+
+    if(price == "") return;
+
+    // Limit price to 6 digits + decimal point
+    price = price.substring(0, 6);
+
+    // Extract digits and decimals
+    String digits = "", decimals = "";
+    bool sDigit = true;
+    for(char c : price){
+        if(c == '.') { sDigit = false; continue; }
+        if(sDigit) digits += c;
+        else decimals += c;
+    }
+
+    // Print Symbol
+    matrix.setTextSize(1);
+    matrix.setTextColor(matrix.Color333(0,0,0));
+    matrix.setCursor(1,1);
+    matrix.print(symbol);
+    
+    // Print Price
+    matrix.setTextColor(getStockColorLoss());
+    matrix.setCursor(matrix.width()-digits.length()*12-decimals.length()*6-5, matrix.height()-15);
+    matrix.setTextSize(2);
+    matrix.print(digits);
+    matrix.drawRect((int)matrix.getCursorX(), matrix.getCursorY()+12, 2, 2, getStockColorLoss());
+    matrix.setCursor(matrix.getCursorX()+4, matrix.getCursorY()+7);
+    matrix.setTextSize(1);
+    matrix.print(decimals);
+
+    // Print Daily Percentage Change
+    matrix.setTextSize(1);
+    matrix.setCursor(matrix.width()-dailyPercentageChange.length()*6+1, 1);
+    for(char c : dailyPercentageChange){
+        if(c == '.'){
+            matrix.drawRect((int)matrix.getCursorX(), matrix.getCursorY()+5, 2, 2, getStockColorLoss());
+            matrix.setCursor(matrix.getCursorX()+4, matrix.getCursorY());
+        }else
+            matrix.print(c);
+    }
+}
 
 /*
   Image Background Layout
@@ -111,15 +164,17 @@ void prepareDisplay(){
             paintFrameThree();
             break;
         case LayoutType::Modern:
+            paintFrameModern();
             break;
     }
 }
 
 // wait() is a delay() without stopping the cpu
 bool wait(unsigned long &last){
-  if ( millis() - last < 3000 ) return false;
-  last = millis();
-  return true;
+    Serial.println(millis() - last);
+    if ( millis() - last < getPeriod() ) return false;
+    last = millis();
+    return true;
 }
 
 void displayStocks(){
@@ -131,11 +186,11 @@ void displayStocks(){
         it = stocks.begin();
     }
 
-    String price, symbol;
+    String price, symbol, priceChange, percentageChange;
 
     // If there are no stocks, show empty screen
     if(numberOfStocks != 0) 
-        price = it->second, symbol = it->first;
+        percentageChange = it->second.percentageChange, priceChange = it->second.priceChange, price = it->second.price, symbol = it->first;
     else
         price = "", symbol = "";
 
@@ -149,6 +204,7 @@ void displayStocks(){
             showStocksThree(symbol, price);
             break;
         case LayoutType::Modern:
+            showStocksModern(symbol, price, percentageChange);
             break;
     }
 

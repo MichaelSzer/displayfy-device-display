@@ -26,4 +26,7 @@ u_int16_t getStockColorGain();
 void setStockColorLoss(byte r, byte g, byte b);
 u_int16_t getStockColorLoss();
 
+void setPeriod(u_int32_t period);
+u_int32_t getPeriod();
+
 #endif

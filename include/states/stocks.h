@@ -4,9 +4,16 @@
 #include <Arduino.h>
 #include <map>
 
-extern std::map<String, String> stocks;
+struct Stock
+{
+    String price;
+    String priceChange;
+    String percentageChange;
+};
 
-void addStock(String stock, String price);
+extern std::map<String, Stock> stocks;
+
+void addStock(String stock, String price, String priceChange, String percentageChange);
 
 void removeStock(String stock);
 
